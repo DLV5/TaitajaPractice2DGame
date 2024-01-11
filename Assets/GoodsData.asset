@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: GoodsData
   m_EditorClassIdentifier: 
   Products:
+  - id: 0
+    picture: {fileID: 2916762351790643026, guid: 420eff8cee9ab6540b69f7934a59927f, type: 3}
   - id: 1
     picture: {fileID: 2916762351790643026, guid: 420eff8cee9ab6540b69f7934a59927f, type: 3}
   - id: 2
@@ -22,6 +24,4 @@ MonoBehaviour:
   - id: 4
     picture: {fileID: 2916762351790643026, guid: 420eff8cee9ab6540b69f7934a59927f, type: 3}
   - id: 5
-    picture: {fileID: 2916762351790643026, guid: 420eff8cee9ab6540b69f7934a59927f, type: 3}
-  - id: 6
     picture: {fileID: 2916762351790643026, guid: 420eff8cee9ab6540b69f7934a59927f, type: 3}
