@@ -4,21 +4,24 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(OrderUI))]
 public class Order : MonoBehaviour
 {
+    public int[] CurrentCustomerOrderId {  get; private set; }
+
     private List<int> _playerChoises;
-    private int[] _currentCustomerOrder;
-    
+
+    private OrderUI _orderUI;
+
+    private void Awake()
+    {
+        _orderUI = GetComponent<OrderUI>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-         _currentCustomerOrder = OrderGenerator.GetNextOrder();
-        _playerChoises = new List<int>();
-
-        foreach (int c in _currentCustomerOrder)
-        {
-            Debug.Log(c);
-        }
+        GetNextCustomer();
     }
 
     public void AddChoice(int choice)
@@ -30,6 +33,8 @@ public class Order : MonoBehaviour
         {
             _playerChoises.Remove(choice);
         }
+
+        _orderUI.ShowPlayerChoices(_playerChoises);
     }
 
     public void DebugOrders()
@@ -43,15 +48,11 @@ public class Order : MonoBehaviour
 
     public void OnOrderComplited()
     {
-        if (CompareOrders())
+        if (!CompareOrders())
         {
-            _currentCustomerOrder = OrderGenerator.GetNextOrder();
-
-            foreach (int c in _currentCustomerOrder)
-            {
-                Debug.Log(c);
-            }
+            return;
         }
+            GetNextCustomer();
     }
 
     /// <summary>
@@ -60,25 +61,40 @@ public class Order : MonoBehaviour
     /// <returns></returns>
     private bool CompareOrders()
     {
-        if (_playerChoises.Count != _currentCustomerOrder.Length)
+        if (_playerChoises.Count != CurrentCustomerOrderId.Length)
         {
             Debug.Log("Arrays are not the same length");
             return false;
         }
 
         _playerChoises = _playerChoises.OrderBy(x => x).ToList();
-        _currentCustomerOrder = _currentCustomerOrder.OrderBy(x => x).ToArray();
+        CurrentCustomerOrderId = CurrentCustomerOrderId.OrderBy(x => x).ToArray();
 
-        for (int i = 0; i < _currentCustomerOrder.Length; i++)
+        for (int i = 0; i < CurrentCustomerOrderId.Length; i++)
         {
-            if (_currentCustomerOrder[i] != _playerChoises[i])
+            if (CurrentCustomerOrderId[i] != _playerChoises[i])
             {
-                Debug.Log($"Product {_currentCustomerOrder[i]} not equal with {_playerChoises[i]}");
+                Debug.Log($"Product {CurrentCustomerOrderId[i]} not equal with {_playerChoises[i]}");
                 return false;
             }
         }
 
         return true;
+    }
+
+    private void GetNextCustomer()
+    {
+        //Have to pay attention to this line of code POSSIBLY CAN CAUSE PROBLEMS WITH SELECTION GRAPHICS ON FUTURE
+        _playerChoises = new List<int>();
+
+        CurrentCustomerOrderId = OrderGenerator.GetNextOrder();
+
+        _orderUI.ShowCustomerOrder(CurrentCustomerOrderId);
+
+        foreach (int c in CurrentCustomerOrderId)
+        {
+            Debug.Log(c);
+        }
     }
 
 }

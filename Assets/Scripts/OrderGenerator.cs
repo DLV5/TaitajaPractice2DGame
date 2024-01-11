@@ -1,12 +1,11 @@
 using System.Linq;
-using UnityEngine;
 
 public static class OrderGenerator
 {
     public static int maxAmountOfItemsInOrder = 3;
     public static int mixAmountOfItemsInOrder = 1;
 
-    private static int[] _products;
+    private static int[] _productsId;
 
     private static int _amountOfItensInOrder;
 
@@ -17,10 +16,11 @@ public static class OrderGenerator
     /// <returns></returns>
     public static int[] GetNextOrder()
     {
-         _amountOfItensInOrder = Random.Range(mixAmountOfItemsInOrder, maxAmountOfItemsInOrder);
-        _products = new int[_amountOfItensInOrder];
-        //Replase with productData later
-        return _products.Select(x => Random.Range(1, 6)).ToArray();
+         _amountOfItensInOrder = UnityEngine.Random.Range(mixAmountOfItemsInOrder, maxAmountOfItemsInOrder);
+        _productsId = new int[_amountOfItensInOrder];
+        return _productsId.Select(x => UnityEngine.Random.Range(1, 6)).Distinct().ToArray();
     }
+
+
 
 }
